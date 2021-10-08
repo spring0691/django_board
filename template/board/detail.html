@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+
+
+<div class="container mt-5 mb-5">
+    
+    <div class="mb-3 mt-5">
+        <label class="form-label">Subject</label>
+        <input type="text" value="{{con.subject}}" disabled class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+    </div>
+    <div class="mb-3 mt-5">
+        <label class="form-label">Writer</label>
+        <input type="text" value="{{con.writer}}" disabled class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Content</label>
+        <textarea class="form-control" disabled>{{ con.content }}</textarea>
+    </div>
+    <div class="text-end">
+        {% if request.user.username == con.writer %}
+        <a href="{% url 'board:update' con.id%}"><button type="button" class="btn btn-danger">update</button></a>
+
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">delete</button>
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">게시글 삭제 알림</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body text-center">정말 삭제하시겠습니까?</div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">아니오</button>
+                        <a href="{% url 'board:delete' con.id%}"><button type="button" class="btn btn-danger">예</button></a>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if user in con.up.all %}
+            <a href="{% url 'board:cancel' con.id %}" class="btn btn-danger">추천취소</a>
+        {% else %}
+            <a href="{% url 'board:up' con.id %}" class="btn btn-primary">추천</a>
+        {% endif %}
+        
+        <a href="{% url 'board:index' %}"><button type="button" class="btn btn-danger">HOME</button></a>
+    </div>
+    
+<!-- ------------------------------------여기부터 댓글 영역-------------------------------------------- -->
+
+    
+    {% if rep %}
+    <hr>
+
+        {% for i in rep %}
+
+        <div class="mt-5 mb-5 row">
+            <div class="col-lg-2 text-center">
+                <img src="{{i.pic.url}}" class="rounded-circle" height="120px">
+            </div>
+            <div class="col-lg-10">
+                <h3>{{i.replyer}}</h3>
+                {% if request.user.username == i.replyer %}
+                    <div style="float:right">
+                        <a href="{% url 'board:delete_reply' con.id i.id%}"><button type="button" class="btn btn-danger">X</button></a>
+                    </div>
+                {% endif %}
+                <textarea disabled class="form-control">{{i.comment}}</textarea>
+                
+            </div>
+        </div>
+            
+              
+        
+        {% endfor%}
+    {% else%}
+
+    {% endif %}
+
+
+
+
+
+    <hr>
+
+    <form method="POST" action="{% url 'board:create_reply' con.id %}">
+        {% csrf_token %}
+        <div class="mb-3 mt-5">
+            <label class="form-label">Comment</label>
+            <input type="text" name="comment" placeholder="댓글을 입력해주세요" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+        </div>
+        <div class="text-end">
+            <button type="submit" class="btn btn-success">댓글달기</button>
+        </div>
+    </form>
+
+        
+</div>
+
+    
+
+
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+<div class="container mt-5 mb-5">
+
+    <h1>OCR Tech</h1>
+
+    <hr>
+
+    <p>사용법<br>
+       1.번역하고싶은기사파일을 업로드합니다.<br>
+       2.번역하고싶은기사의 언어를 선택합니다.<br>
+       3.Extract버튼을 누르면 원어로 추출됩니다.<br>
+       4.Trans to Korean을 누르면 한국어로 번역됩니다.</p>
+
+    <hr>
+
+    <h5 class="mt-5">추출할 이미지를 넣어주세요</h5>
+
+    <form method="POST" enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+        <input type="file" name="pic" class="mt-3 form-control">
+
+        <div class="row mt-5">
+            <div class="col-lg-10">
+                <select class="form-select" name="nat">
+                    <option value="kor" {% if nat == "kor"%} selected {% endif %}>Korean</option>
+                    <option value="eng" {% if nat == "eng"%} selected {% endif %}>English</option>
+                    <option value="chi_sim" {% if nat == "chi_sim"%} selected {% endif %}>Chinese</option>
+                    <option value="jpn" {% if nat == "jpn"%} selected {% endif %}>Japenese</option>
+                    <option value="vie" {% if nat == "vie"%} selected {% endif %}>Vietnam</option>
+                </select>
+            </div>
+
+            <div class="col-lg-2" style="margin: auto;">
+                <button class="btn btn-primary">Extract</button>
+            </div>
+        </div>
+
+    </form>
+    
+    <form method="POST" action="{% url 'trans:index' %}">
+        {% csrf_token %}
+        <textarea name="before" class="mt-5 form-control" style="height: 300px;">{{con}}</textarea>
+        <button class="btn btn-secondary">Trans to Korean</button>
+
+    </form>
+    
+
+</div>
+
+
+
+
+{% endblock %}

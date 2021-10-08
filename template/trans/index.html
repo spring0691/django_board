@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container mt-5 mb-5">
+
+    <h1>번역해줘</h1>
+    <hr>
+
+    <form method="POST">
+        {% csrf_token %}
+        <div class="row mt-5">
+            <div class="col-lg-5">
+                <h4>BEFORE</h4>
+                <textarea name="before" class="form-control mt-3" style="height: 300px;" placeholder="번역할 내용을 입력하세요">{{before}}</textarea>
+            </div>
+            <div class="col-lg-2 text-center" style="margin:auto">
+
+                <h4>FROM</h4>
+                <select class="form-select" name="from" size="3" aria-label="size 3 select example">
+                    <option value="ko" {% if from == 'ko' or not from %} selected {% endif %}>KO</option>
+                    <option value="en" {% if from == 'en' %} selected {% endif %}>EN</option>
+                    <option value="ja" {% if from == 'ja' %} selected {% endif %}>JP</option>
+                    <option value="zh-cn" {% if from == 'zh-cn' %} selected {% endif %}>CH</option>
+                  </select>
+
+                <button class="btn btn-secondary mt-3 mb-3">TRANS</button>
+                
+                <h4>TO</h4>
+                <select class="form-select" name="to" size="3" aria-label="size 3 select example">   
+                    <option value="ko" {% if to == 'ko' %} selected {% endif %}>KO</option>
+                    <option value="en" {% if to == 'en' or not from %} selected {% endif %}>EN</option>
+                    <option value="ja" {% if to == 'ja' %} selected {% endif %}>JP</option>
+                    <option value="zh-cn" {% if to == 'zh-cn' %} selected {% endif %}>CH</option>
+                  </select>
+            </div>
+            <div class="col-lg-5">
+                <h4>AFTER</h4>
+                <textarea disabled class="form-control mt-3" style="height: 300px;">{{after}}</textarea>
+            </div>
+        </div>
+    </form>    
+</div>
+
+{% endblock %}

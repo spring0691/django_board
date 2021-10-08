@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+
+    <title>Hello, world!</title>
+</head>
+<body>
+
+    {% if request.user.is_authenticated %}
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'acc:index' %}">Home</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'board:index' %}">Board</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'vote:index' %}">Vote</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'trans:index' %}">Trans</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'ocr:index' %}">OCR</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'quiz:index' %}">QUIZ</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'pdfread:index' %}">PDF Read</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ user.username }} 님</a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="{% url 'acc:profile_user'%}">Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{% url 'acc:logout_user' %}">Logout</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+            {% for i in messages %}
+                <div class="alert {{i.tags}} alert-dismissible fade show" role="alert">
+                    <strong>{{i.tags}}</strong> {{i.message}}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        
+        {% block content %}
+
+            <div class="p-5 mb-4 bg-light rounded-3">
+                <div class="container-fluid py-5">
+                    <h1 class="display-5 fw-bold">Hello {{user.username}} ~</h1>
+                </div>
+            </div>
+
+        {% endblock %}
+
+        {% else %}
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="{% url 'acc:index' %}">Home</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{% url 'acc:login_user' %}">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{% url 'acc:signup_user' %}">Signup</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{% url 'trans:index' %}">Trans</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+            {% for i in messages %}
+                <div class="alert {{i.tags}} alert-dismissible fade show" role="alert">
+                    <strong>{{i.tags}}</strong> {{i.message}}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+
+        {% block not_auth %}
+            <div class="p-5 mb-4 bg-light rounded-3">
+                <div class="container-fluid py-5">
+                    <h1 class="display-5 fw-bold">Welcome To Django</h1>
+                    
+                    <a href="{% url 'acc:login_user' %}"><button class="btn btn-primary mt-5 btn-lg" type="button">LOGIN</button></a>
+                </div>
+            </div>
+
+        {% endblock %}
+
+    {% endif %}
+    
+    <style>
+        .error{
+            background-color: rgb(192, 29, 29, 0.421);
+        }
+        .success{
+            background-color: rgb(13, 116, 98);
+        }
+        .warning{
+            background-color: rgb(161, 189, 36);
+        }
+        .info{
+            background-color: rgb(33, 75, 114);
+        }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+
+</body>
+</html>

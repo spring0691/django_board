@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container mt-5 mb-5">
+    <h1>{{ con.subject }}</h1>
+    <div class="text-end">
+        <img src="{{ con.writer_pic.url }}" class="rounded-circle" width="100">
+        <p>
+            writer {{ con.writer }}
+        </p>
+    </div>
+    
+    <div class="mb-3">
+        <label class="form-label">Comment</label>
+        <textarea class="form-control" disabled>{{ con.comment }}</textarea>
+    </div>
+
+    <hr>
+
+    {% load mathfilters%}
+    <form method="POST" action="{% url 'vote:vote' con.id %}">
+        {% csrf_token %}
+        <div class="row">
+            {% for i in cho%}
+                <div class="col-lg-4 text-center">
+                    {% if user in con.voter.all %}
+                    {% else %}
+                        <input class="form-check-input" type="radio" value="{{i.id}}" name="choice" id="flexRadioDefault1" {% if forloop.first %} checked {% endif%}> 
+                    {% endif %}
+                        <img src="{{ i.pic.url }}" height="140" class="rounded-circle">
+                        <h2>{{ i.name }}</h2>
+                    {% if user in con.voter.all %}
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" style="width: {{ i.cuser.count|div:con.voter.count|mul:100 }}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{{i.cuser.count|div:con.voter.count|mul:100 }}%</div>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            
+            {% if user in con.voter.all %}
+                <div class="container mt-5 text-center">
+                    <a href="{% url 'vote:cancel' con.id %}"><button type="button" class="btn btn-danger">CANCEL</button></a>
+                </div>
+            {% else %}
+                <div class="container mt-5 text-center">
+                    <button class="btn btn-primary">VOTE!</button>
+                </div>
+            {% endif %}
+        </div>
+
+    </form>
+
+</div> 
+
+
+{% endblock %}
